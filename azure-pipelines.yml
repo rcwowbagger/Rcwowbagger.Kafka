@@ -1,0 +1,63 @@
+trigger:
+- master
+
+
+variables:
+  buildConfiguration: 'Release'
+  Major: 1
+  Minor: 0
+  Patch: $[counter(format('{0}.{1}', variables['Major'], variables['Minor']), 0)]
+  PackageVersionType: ''
+  VersionPrefix: $(Major).$(Minor).$(Patch)$(PackageVersionType)
+  nugetFeed: 'RcwowbaggerNuget'
+
+
+pool: 
+  vmImage: ubuntu-latest
+
+
+
+steps:
+- task: NuGetToolInstaller@1
+
+
+- task: UseDotNet@2
+  displayName: 'Install .NET Core SDK'
+  inputs:
+    version: 7.0.x
+    performMultiLevelLookup: true
+
+- task: DotNetCoreCLI@2
+  displayName: Build
+  inputs:
+    command: build
+    projects: '**/*.sln'
+    arguments: --configuration $(buildConfiguration)
+
+- task: DotNetCoreCLI@2
+  displayName: 'Run unit tests - $(buildConfiguration)'
+  inputs:
+    command: 'test'
+    arguments: '--no-build --configuration $(buildConfiguration)'
+    publishTestResults: true
+    projects: '**/*.Tests.csproj'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Pack'
+  inputs: 
+    command: 'pack'
+    outputDir: '$(Build.ArtifactStagingDirectory)/nupkg/'
+    includesymbols: true
+    packagesToPack: '$(Build.DefinitionName)/$(Build.DefinitionName).csproj'
+    versioningScheme: 'byEnvVar'
+    versionEnvVar: 'VersionPrefix'
+
+- task: NuGetCommand@2
+  displayName: 'Push'
+  inputs: 
+    command: push
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/nupkg/**/$(Build.DefinitionName)*.nupkg;'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: '$(nugetFeed)'
+    verbosityPush: Detailed
+    allowPackageConflicts: true
