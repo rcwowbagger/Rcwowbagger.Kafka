@@ -1,7 +1,6 @@
 trigger:
 - master
 
-
 variables:
   buildConfiguration: 'Release'
   Major: 1
@@ -14,8 +13,6 @@ variables:
 
 pool: 
   vmImage: ubuntu-latest
-
-
 
 steps:
 - task: NuGetToolInstaller@1

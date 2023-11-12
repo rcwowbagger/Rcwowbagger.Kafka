@@ -7,17 +7,17 @@ using System.Collections.Concurrent;
 
 namespace Rcwowbagger.Kafka;
 
-public class KafkaConsumer : IConsumer
+public class KafkaConsumer<T> : IConsumer<T>
 {
     public readonly ILogger _logger;
     private readonly KafkaConfiguration? _config;
-    public event Action<string> OnMessage;
-    private readonly BlockingCollection<string> _queue = new();
+    public event Action<T> OnMessage;
+    private readonly BlockingCollection<T> _queue = new();
 
 
     public KafkaConsumer(IConfiguration configuration)
     {
-        _logger = Log.ForContext<KafkaConsumer>();
+        _logger = Log.ForContext<KafkaConsumer<T>>();
         _config = configuration.GetSection("Kafka").Get<KafkaConfiguration>();
 
         _logger.Information("{@config}", _config);
@@ -58,7 +58,7 @@ public class KafkaConsumer : IConsumer
         {
             _logger.Information("Beginning consume...");
 
-            using (var consumer = new ConsumerBuilder<Ignore, string>(config).Build())
+            using (var consumer = new ConsumerBuilder<Ignore, T>(config).Build())
             {
                 consumer.Subscribe(_config.Topic);
 
