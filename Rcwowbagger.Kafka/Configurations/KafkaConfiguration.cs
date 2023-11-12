@@ -6,4 +6,5 @@ internal class KafkaConfiguration
     public string Topic { get; set; }
     public string GroupId { get; set; }
     public string ClientId { get; set; }
+    public bool? EnableAutoCommit { get; set; }
 }

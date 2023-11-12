@@ -51,7 +51,8 @@ public class KafkaConsumer<T> : IConsumer<T>
             BootstrapServers = _config.BootstrapServers,
             GroupId = _config.GroupId,
             ClientId = _config.ClientId,
-            AutoOffsetReset = AutoOffsetReset.Earliest
+            AutoOffsetReset = AutoOffsetReset.Earliest,
+            EnableAutoCommit = _config.EnableAutoCommit ?? true
         };
 
         try

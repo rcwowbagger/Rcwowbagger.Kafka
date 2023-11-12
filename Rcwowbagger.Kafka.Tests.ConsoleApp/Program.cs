@@ -17,7 +17,8 @@ var configuration = new ConfigurationBuilder()
 var consumer = new KafkaConsumer<string>(configuration);
 consumer.OnMessage += (obj) =>
 {
-    Console.WriteLine(obj.ToString());
+
+    Console.WriteLine($"{obj} { (DateTime.Now - DateTime.Parse(obj)).TotalMilliseconds.ToString("n2") }");
 };
 
 
@@ -29,7 +30,7 @@ Task.Run(async () =>
 {
     while (!tokenSource.IsCancellationRequested)
     {
-        await producer.PublishAsync($"{DateTime.UtcNow:o}");
+        await producer.PublishAsync($"{DateTime.Now:o}");
         
         await Task.Delay(1_000);
     }
