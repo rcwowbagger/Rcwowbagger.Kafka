@@ -3,17 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rcwowbagger.Kafka", "Rcwowbagger.Kafka\Rcwowbagger.Kafka.csproj", "{DB672E8A-D90E-4009-B6F2-065F511B15A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rcwowbagger.Kafka", "Rcwowbagger.Kafka\Rcwowbagger.Kafka.csproj", "{DB672E8A-D90E-4009-B6F2-065F511B15A8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3D592DB6-9BE0-49AF-96EF-6B10E7B80970}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{DCC61857-5398-43E7-A68A-290124ABE53E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rcwowbagger.Kafka.Tests.ConsoleApp", "Rcwowbagger.Kafka.Tests.ConsoleApp\Rcwowbagger.Kafka.Tests.ConsoleApp.csproj", "{7800F0BE-D401-4207-AA2D-CA8EC6BDCA58}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rcwowbagger.Kafka.Tests.ConsoleApp", "Rcwowbagger.Kafka.Tests.ConsoleApp\Rcwowbagger.Kafka.Tests.ConsoleApp.csproj", "{7800F0BE-D401-4207-AA2D-CA8EC6BDCA58}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D909BC9F-3BEE-45EF-BCE0-84731B856D76}"
 	ProjectSection(SolutionItems) = preProject
 		azure-pipelines.yml = azure-pipelines.yml
+		README.md = README.md
 	EndProjectSection
 EndProject
 Global
