@@ -30,7 +30,7 @@ Task.Run(async () =>
 {
     while (!tokenSource.IsCancellationRequested)
     {
-        await producer.PublishAsync($"{DateTime.Now:o}");
+        await producer.PublishAsync($"{DateTime.Now:o}", "test");
         
         await Task.Delay(1_000);
     }

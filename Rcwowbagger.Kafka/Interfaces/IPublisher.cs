@@ -2,5 +2,5 @@
 
 public interface IPublisher<T> : IDisposable
 {
-    Task PublishAsync(T message);
+    Task PublishAsync(T message, string topic);
 }

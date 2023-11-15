@@ -26,11 +26,11 @@ public class KafkaPublisher<T> : IPublisher<T>
     }
 
 
-    public async Task PublishAsync(T message)
+    public async Task PublishAsync(T message, string topic)
     {
         try
         {
-            _ = await _producer.ProduceAsync(_config.Topic, new Message<Null, T> { Value = message });
+            _ = await _producer.ProduceAsync(topic, new Message<Null, T> { Value = message });
         }
         catch (ProduceException<Null, string> ex)
         {
