@@ -58,10 +58,11 @@ public class KafkaConsumer<T> : IConsumer<T>
         try
         {
             _logger.Information("Beginning consume...");
-
             using (var consumer = new ConsumerBuilder<Ignore, T>(config).Build())
             {
-                consumer.Subscribe(_config.Topic);
+
+                var topics = GetTopics().Where(x => x.StartsWith(_config.TopicPrefix)).ToList();
+                consumer.Subscribe(topics);
 
                 while (!cancellationToken.IsCancellationRequested)
                 {
@@ -74,6 +75,20 @@ public class KafkaConsumer<T> : IConsumer<T>
         catch (Exception ex)
         {
             _logger.Warning(ex, "");
+        }
+    }
+
+    public List<string> GetTopics()
+    {
+        var config = new AdminClientConfig
+        {
+            BootstrapServers = _config.BootstrapServers
+        };
+        using (var adminClient = new AdminClientBuilder(config).Build())
+        {
+            var metadata = adminClient.GetMetadata(TimeSpan.FromSeconds(10));
+            var topicNames = metadata.Topics.Select(a => a.Topic).ToList();
+            return topicNames;
         }
     }
 }
