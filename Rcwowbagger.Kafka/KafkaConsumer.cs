@@ -7,17 +7,17 @@ using System.Collections.Concurrent;
 
 namespace Rcwowbagger.Kafka;
 
-public class KafkaConsumer<T> : IConsumer<T>
+public class KafkaConsumer<TKey, TValue> : IKafkaConsumer<TKey, TValue>
 {
     public readonly ILogger _logger;
     private readonly KafkaConfiguration? _config;
-    public event Action<T> OnMessage;
-    private readonly BlockingCollection<T> _queue = new();
+    public event Action<TKey, TValue> OnMessage;
+    private readonly BlockingCollection<(TKey key, TValue value)> _queue = new();
 
 
     public KafkaConsumer(IConfiguration configuration)
     {
-        _logger = Log.ForContext<KafkaConsumer<T>>();
+        _logger = Log.ForContext<KafkaConsumer<TKey, TValue>>();
         _config = configuration.GetSection("Kafka").Get<KafkaConfiguration>();
 
         _logger.Information("{@config}", _config);
@@ -31,7 +31,7 @@ public class KafkaConsumer<T> : IConsumer<T>
             {
                 if (_queue.TryTake(out var item, 10_000, cancellationToken))
                 {
-                    OnMessage?.Invoke(item);
+                    OnMessage?.Invoke(item.key, item.value);
                 }
             }
             catch (OperationCanceledException) { }
@@ -58,7 +58,7 @@ public class KafkaConsumer<T> : IConsumer<T>
         try
         {
             _logger.Information("Beginning consume...");
-            using (var consumer = new ConsumerBuilder<Ignore, T>(config).Build())
+            using (var consumer = new ConsumerBuilder<TKey, TValue>(config).Build())
             {
 
                 var topics = GetTopics().Where(x => x.StartsWith(_config.TopicPrefix)).ToList();
@@ -67,7 +67,7 @@ public class KafkaConsumer<T> : IConsumer<T>
                 while (!cancellationToken.IsCancellationRequested)
                 {
                     var result = consumer.Consume(cancellationToken);
-                    _queue.Add(result.Value);
+                    _queue.Add((result.Key, result.Value));
                 }
             }
         }

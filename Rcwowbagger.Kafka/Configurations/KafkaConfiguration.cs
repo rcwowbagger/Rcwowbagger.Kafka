@@ -1,6 +1,6 @@
 ﻿namespace Rcwowbagger.Kafka.Configurations;
 
-internal class KafkaConfiguration
+public class KafkaConfiguration
 {
     public string BootstrapServers { get; set; }
     public string TopicPrefix { get; set; }

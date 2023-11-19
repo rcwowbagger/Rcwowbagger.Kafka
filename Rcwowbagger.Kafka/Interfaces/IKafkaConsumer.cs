@@ -1,8 +1,8 @@
 ﻿namespace Rcwowbagger.Kafka.Interfaces;
 
-public interface IConsumer<T>
+public interface IKafkaConsumer<TKey, TValue>
 {
-    event Action<T> OnMessage;
+    event Action<TKey, TValue> OnMessage;
 
     Task SubscribeAsync(CancellationToken cancellationToken);
 }
